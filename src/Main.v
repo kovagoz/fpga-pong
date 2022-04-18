@@ -91,7 +91,7 @@ module Main(
   );
 
   // Create the composite ball video signal
-  wire w_Ball_Video = w_HBall_Video & w_HBall_Video;
+  wire w_Ball_Video = w_HBall_Video & w_VBall_Video;
 
   //------------------------------
   //  VGA
