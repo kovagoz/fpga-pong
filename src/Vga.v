@@ -55,30 +55,23 @@ module Vga(
 
   // Horizontal counter from 1 to H_MAX.
   always @(posedge i_Clk) begin
-    if (x == `H_MAX)
-      x <= 1;
-    else
-      x <= x + 1;
-  end
-
-  // Shape the horizontal RESET and BLANK signals.
-  always @(negedge i_Clk) begin
-    hr <= x == `H_MAX;
-    hb <= x >= `H_VISIBLE_AREA && x < `H_MAX;
-  end
-
-  // Vertical counter from 1 to V_MAX.
-  always @(posedge i_Clk) begin
     if (x == `H_MAX) begin
+      x <= 1;
+
+      // Vertical counter from 1 to V_MAX.
       if (y == `V_MAX)
         y <= 1;
       else
         y <= y + 1;
+    end else begin
+      x <= x + 1;
     end
   end
 
-  // Shape the vertical RESET and BLANK signals.
+  // Shape the horizontal and vertical RESET and BLANK signals.
   always @(negedge i_Clk) begin
+    hr <= x == `H_MAX;
+    hb <= x >= `H_VISIBLE_AREA && x < `H_MAX;
     vr <= (y == 1 && x < `H_MAX) || (y == `V_MAX && x== `H_MAX);
     vb <= (y > `V_VISIBLE_AREA || y == `V_VISIBLE_AREA && x == `H_MAX)
        && (y < `V_MAX || y == `V_MAX && x < `H_MAX);
