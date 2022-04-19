@@ -38,8 +38,7 @@ module Ball_Horizontal(
   wire w_Move = i_VBlank && speed > 0;
 
   // Shape the horizontal component of the ball's video signal.
-  assign o_Video = ~i_HBlank
-    && pos > BALL_HRESET + (`H_VISIBLE_AREA - `BALL_SIZE) / 2
+  assign o_Video = pos > BALL_HRESET + (`H_VISIBLE_AREA - `BALL_SIZE) / 2
     && pos <= BALL_HRESET + (`H_VISIBLE_AREA + `BALL_SIZE) / 2;
 
   // Horizontal Position Counter
