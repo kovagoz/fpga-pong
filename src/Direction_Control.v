@@ -9,6 +9,9 @@
 
 module Direction_Control(
   input  i_Clk,
+  input  i_VReset,
+  input  i_VBlank,
+  input  i_VBall,
   input  i_Switch_1,
   input  i_Switch_2,
   input  i_Switch_3,
@@ -27,7 +30,17 @@ module Direction_Control(
   assign o_HDir = hdir;
   assign o_VDir = vdir;
 
-  always @(posedge i_Clk) begin
+  always @(negedge i_Clk) begin
+    // Bounce off the top edge of the screen.
+    if (i_VBall && i_VReset) begin
+      vdir <= DOWN;
+    end
+
+    // Bounce off the bottom edge of the screen.
+    if (i_VBall && i_VBlank) begin
+      vdir <= UP;
+    end
+
     if (i_Switch_1) begin
       hdir <= LEFT;
       vdir <= UP;
