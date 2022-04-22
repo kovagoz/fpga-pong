@@ -22,23 +22,23 @@ module Ball_Vertical(
   localparam V_COUNTER_MAX = (1 << HEIGHT_BITS) - 1;
 
   // Calculate the counter's initial value if the end is the maximum.
-  localparam BALL_VRESET = V_COUNTER_MAX - `V_VISIBLE_AREA + 1;
+  localparam BALL_RESET = V_COUNTER_MAX - `V_VISIBLE_AREA + 1;
 
   // Initial position can be overwrite for testing.
-  parameter p_POS = BALL_VRESET;
+  parameter p_POS = BALL_RESET;
 
   // Size of counter's register follows the actual screen size.
   reg [HEIGHT_BITS-1:0] pos = p_POS;
 
   // Shape the vertical component of the ball's video signal.
-  assign o_Video = pos > BALL_VRESET + (`V_VISIBLE_AREA - `BALL_SIZE) / 2
-    && pos <= BALL_VRESET + (`V_VISIBLE_AREA + `BALL_SIZE) / 2;
+  assign o_Video = pos > BALL_RESET + (`V_VISIBLE_AREA - `BALL_SIZE) / 2
+    && pos <= BALL_RESET + (`V_VISIBLE_AREA + `BALL_SIZE) / 2;
 
   // Vertical Position Counter
   always @(posedge i_Clk) begin
     if (~i_VBlank && i_HReset) begin
       if (pos == V_COUNTER_MAX) begin
-        pos <= BALL_VRESET + (i_VDir ? 1 : -1);
+        pos <= BALL_RESET + (i_VDir ? 1 : -1);
       end else begin
         pos <= pos + 1;
       end
