@@ -27,10 +27,13 @@ module Ball_Horizontal(
   localparam H_COUNTER_MAX = (1 << WIDTH_BITS) - 1;
 
   // Calculate the counter's initial value if the end is the maximum.
-  localparam BALL_HRESET = H_COUNTER_MAX - `H_VISIBLE_AREA;
+  localparam BALL_RESET = H_COUNTER_MAX - `H_VISIBLE_AREA;
+
+  // Initial position can be overwrite for testing.
+  parameter p_POS = BALL_RESET;
 
   // Size of counter's register follows the actual screen size.
-  reg [WIDTH_BITS-1:0] pos   = BALL_HRESET;
+  reg [WIDTH_BITS-1:0] pos   = p_POS;
   reg [2:0]            speed = p_SPEED;
 
   // This signal indicates that the ball should move along in horizontal
@@ -38,8 +41,8 @@ module Ball_Horizontal(
   wire w_Move = i_VBlank && speed > 0;
 
   // Shape the horizontal component of the ball's video signal.
-  assign o_Video = pos > BALL_HRESET + (`H_VISIBLE_AREA - `BALL_SIZE) / 2
-    && pos <= BALL_HRESET + (`H_VISIBLE_AREA + `BALL_SIZE) / 2;
+  assign o_Video = pos > BALL_RESET + (`H_VISIBLE_AREA - `BALL_SIZE) / 2
+    && pos <= BALL_RESET + (`H_VISIBLE_AREA + `BALL_SIZE) / 2;
 
   // Horizontal Position Counter
   always @(posedge i_Clk) begin
@@ -50,7 +53,7 @@ module Ball_Horizontal(
         // speed register indicates. This slip cause then the horizontal
         // motion of the ball. The higher the value in speed register, the
         // faster the ball will move.
-        pos <= BALL_HRESET + (w_Move ? i_HDir * 2 : 1);
+        pos <= BALL_RESET + (w_Move ? i_HDir * 2 : 1);
 
         if (w_Move) begin
           speed <= speed - 1;
