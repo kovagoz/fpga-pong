@@ -56,8 +56,11 @@ module Main(
 
   Direction_Control dir_ctrl(
     .i_Clk(i_Clk),
+    .i_HReset(w_HReset),
     .i_VReset(w_VReset),
+    .i_HBlank(w_HBlank),
     .i_VBlank(w_VBlank),
+    .i_HBall(w_HBall_Video),
     .i_VBall(w_VBall_Video),
     .i_Switch_1(i_Switch_1),
     .i_Switch_2(i_Switch_2),
