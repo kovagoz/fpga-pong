@@ -2,6 +2,7 @@
 `include "Ball_Vertical.v"
 `include "Config.v"
 `include "Direction_Control.v"
+`include "Net.v"
 `include "Paddle.v"
 `include "Vga.v"
 
@@ -100,6 +101,19 @@ module Main(
   wire w_Ball_Video = w_HBall_Video & w_VBall_Video;
 
   //------------------------------
+  //  Net
+  //------------------------------
+
+  wire w_Net_Video;
+
+  Net net(
+    .i_Clk(i_Clk),
+    .i_HReset(w_HReset),
+    .i_VReset(w_VReset),
+    .o_Video(w_Net_Video)
+  );
+
+  //------------------------------
   //  VGA
   //------------------------------
 
@@ -111,7 +125,7 @@ module Main(
 
   Vga vga(
     .i_Clk(i_Clk),
-    .i_Video(w_Paddle_Video | w_Ball_Video),
+    .i_Video(w_Paddle_Video | w_Ball_Video | w_Net_Video),
     .o_HSync(o_VGA_HSync),
     .o_VSync(o_VGA_VSync),
     .o_HReset(w_HReset),
