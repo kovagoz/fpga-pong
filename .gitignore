@@ -4,3 +4,4 @@ test/*.vvp
 constraints.pcf
 .hdl_checker/
 *.swp
+.vagrant
