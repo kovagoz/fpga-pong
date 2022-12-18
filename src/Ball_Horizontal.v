@@ -29,7 +29,7 @@ module Ball_Horizontal(
   // Calculate the counter's initial value if the end is the maximum.
   localparam BALL_RESET = H_COUNTER_MAX - `H_VISIBLE_AREA;
 
-  // Initial position can be overwrite for testing.
+  // Initial position can be override for testing purpose.
   parameter p_POS = BALL_RESET;
 
   // Size of counter's register follows the actual screen size.

@@ -8,6 +8,7 @@ module Paddle(
   output o_555_Trigger,
   output o_Video);
 
+  // TODO remove the PADDLE prefix
   parameter p_PADDLE_HEIGHT   = 55;
   parameter p_PADDLE_DISTANCE = 30;
   parameter p_PADDLE_WIDTH    = 12;
@@ -16,9 +17,11 @@ module Paddle(
   reg [5:0] paddle = 1;
 
   // Counter to measure the distance from the left edge of the screen.
+  // TODO make the size calculated from p_PADDLE_HEIGHT
   reg [5:0] dx = 0;
 
   // Shape the paddle video signal.
+  // TODO split video signal to horizontal and vertical components
   assign o_Video = ~i_555_Output
     && paddle > 0
     && paddle <= p_PADDLE_HEIGHT

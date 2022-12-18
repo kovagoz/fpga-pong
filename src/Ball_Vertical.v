@@ -36,6 +36,7 @@ module Ball_Vertical(
 
   // Vertical Position Counter
   always @(posedge i_Clk) begin
+    // TODO or i_VBlank && ball_speed > 0
     if (~i_VBlank && i_HReset) begin
       if (pos == V_COUNTER_MAX) begin
         pos <= BALL_RESET + (i_VDir ? 1 : -1);
