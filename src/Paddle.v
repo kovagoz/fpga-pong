@@ -8,25 +8,24 @@ module Paddle(
   output o_555_Trigger,
   output o_Video);
 
-  // TODO remove the PADDLE prefix
-  parameter p_PADDLE_HEIGHT   = 55;
-  parameter p_PADDLE_DISTANCE = 30;
-  parameter p_PADDLE_WIDTH    = 12;
+  parameter p_HEIGHT   = 55;
+  parameter p_DISTANCE = 30;
+  parameter p_WIDTH    = 12;
 
   // Counter to track the height of the paddle.
   reg [5:0] paddle = 1;
 
   // Counter to measure the distance from the left edge of the screen.
-  // TODO make the size calculated from p_PADDLE_HEIGHT
+  // TODO make the size calculated from p_HEIGHT
   reg [5:0] dx = 0;
 
   // Shape the paddle video signal.
   // TODO split video signal to horizontal and vertical components
   assign o_Video = ~i_555_Output
     && paddle > 0
-    && paddle <= p_PADDLE_HEIGHT
-    && dx > p_PADDLE_DISTANCE
-    && dx < p_PADDLE_DISTANCE + p_PADDLE_WIDTH;
+    && paddle <= p_HEIGHT
+    && dx > p_DISTANCE
+    && dx < p_DISTANCE + p_WIDTH;
 
   // Send VSYNC to the 555's trigger pin.
   assign o_555_Trigger = i_VSync;
