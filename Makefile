@@ -1,5 +1,6 @@
 MODULE       ?= Main
-USE_DOCKER   ?= 1
+USE_DOCKER   ?= 0
+USB_DEVICE   ?= /dev/ttyUSB1
 
 icepack_cmd  := icepack
 nextpnr_cmd  := nextpnr-ice40
@@ -18,7 +19,7 @@ docker_run   := docker run --rm $(use_tty) -v $(PWD):/host -w /host
 icepack_cmd  := $(docker_run) $(docker_img) $(icepack_cmd)
 nextpnr_cmd  := $(docker_run) $(docker_img) $(nextpnr_cmd)
 yosys_cmd    := $(docker_run) $(docker_img) $(yosys_cmd)
-iceprog_cmd  := $(docker_run) --device /dev/ttyUSB1 --privileged --user 0 $(docker_img) iceprog
+iceprog_cmd  := $(docker_run) --device $(USB_DEVICE) --privileged --user 0 $(docker_img) iceprog
 vvp_cmd      := $(docker_run) --entrypoint vvp kovagoz/iverilog:0.5.0
 iverilog_cmd := $(docker_run) kovagoz/iverilog:0.5.0
 
@@ -35,6 +36,7 @@ bin/Main.bin: bin/Main.asc
 bin/Main.asc: bin/Main.json constraints.pcf
 	$(nextpnr_cmd) --hx1k --package vq100 --json $< --pcf $(word 2,$^) --asc $@
 
+# Synthesis
 bin/Main.json: src/*.v | bin
 	$(yosys_cmd) -p 'synth_ice40 -top Main -json $@' src/Main.v
 
