@@ -19,6 +19,7 @@ module Direction_Control(
   input  i_Switch_2,
   input  i_Switch_3,
   input  i_Switch_4,
+  input  i_Hit,
   output o_HDir,
   output o_VDir);
 
@@ -51,6 +52,10 @@ module Direction_Control(
 
     // Bounce off the left edge of the screen.
     if (i_HBall && i_HReset) begin
+      hdir <= RIGHT;
+    end
+
+    if (i_Hit) begin
       hdir <= RIGHT;
     end
 

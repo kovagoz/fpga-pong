@@ -2,6 +2,7 @@
 `include "Ball_Vertical.v"
 `include "Config.v"
 `include "Direction_Control.v"
+`include "Hit_Detector.v"
 `include "Net.v"
 `include "Paddle.v"
 `include "Vga.v"
@@ -54,6 +55,19 @@ module Main(
   );
 
   //------------------------------
+  //  Hit detector
+  //------------------------------
+
+  wire w_Hit;
+
+  Hit_Detector hit(
+    .i_Clk(i_Clk),
+    .i_Ball(w_Ball_Video),
+    .i_Paddle(w_Paddle_Video),
+    .o_Hit(w_Hit)
+  );
+
+  //------------------------------
   //  Ball Direction Control
   //------------------------------
 
@@ -72,6 +86,7 @@ module Main(
     .i_Switch_2(i_Switch_2),
     .i_Switch_3(i_Switch_3),
     .i_Switch_4(i_Switch_4),
+    .i_Hit(w_Hit),
     .o_HDir(w_HDir),
     .o_VDir(w_VDir)
   );
