@@ -1,4 +1,3 @@
-`include "Pulse.v"
 `include "Vga_Timing.v"
 
 /*
