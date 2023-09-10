@@ -17,6 +17,11 @@ module Main(
   input  io_PMOD_1,
   output io_PMOD_2,
 
+  output o_LED_1,
+  output o_LED_2,
+  output o_LED_3,
+  output o_LED_4,
+
   output o_VGA_HSync,
   output o_VGA_VSync,
 
@@ -148,5 +153,27 @@ module Main(
   assign o_VGA_Blu_0 = w_Video;
   assign o_VGA_Blu_1 = w_Video;
   assign o_VGA_Blu_2 = w_Video;
+
+  //------------------------------
+  //  Running light
+  //------------------------------
+
+  reg [3:0] led_state = 1;
+
+  assign {o_LED_1, o_LED_2, o_LED_3, o_LED_4} = led_state;
+
+  reg [24:0] led_counter = 0;
+
+  always @(posedge i_Clk) begin
+    if (led_counter == 12500000) begin
+      led_counter <= 0;
+
+      if (led_state == 8)
+        led_state <= 1;
+      else
+        led_state <= led_state << 1;
+    end else
+      led_counter <= led_counter + 1;
+  end
 
 endmodule
