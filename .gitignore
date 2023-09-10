@@ -5,3 +5,4 @@ constraints.pcf
 .hdl_checker/
 *.swp
 .vagrant
+.idea
