@@ -1,6 +1,7 @@
 MODULE       ?= Main
 USE_DOCKER   ?= 0
 USB_DEVICE   ?= /dev/ttyUSB1
+USE_VAGRANT  ?= 1
 
 icepack_cmd  := icepack
 nextpnr_cmd  := nextpnr-ice40
@@ -25,20 +26,23 @@ iverilog_cmd := $(docker_run) kovagoz/iverilog:0.5.0
 
 endif
 
+# Command executor which runs the given command in the proper environment.
+run = $(if $(subst 0,,$(USE_VAGRANT)),vagrant ssh -c "cd /mnt/project && $(1)",$(1))
+
 # --  BUILDING ------------------
 
 .PHONY: build
 build: bin/Main.bin
 
 bin/Main.bin: bin/Main.asc
-	$(icepack_cmd) $< $@
+	$(call run,$(icepack_cmd) $< $@)
 
 bin/Main.asc: bin/Main.json constraints.pcf
-	$(nextpnr_cmd) --hx1k --package vq100 --json $< --pcf $(word 2,$^) --asc $@
+	$(call run,$(nextpnr_cmd) --hx1k --package vq100 --json $< --pcf $(word 2,$^) --asc $@)
 
 # Synthesis
 bin/Main.json: src/*.v | bin
-	$(yosys_cmd) -p 'synth_ice40 -top Main -json $@' src/Main.v
+	$(call run,$(yosys_cmd) -p 'synth_ice40 -top Main -json $@' src/Main.v)
 
 bin:
 	mkdir $@
@@ -54,7 +58,7 @@ clean:
 
 .PHONY: install
 install: bin/Main.bin # Send bitstream to the Go Board
-	$(iceprog_cmd) $<
+	$(call run,$(iceprog_cmd) $<)
 
 # -- TESTING --------------------
 
@@ -63,16 +67,16 @@ test: test/$(MODULE).vcd # Run the simulation and show results in GTKWave
 	open -a gtkwave $<
 
 test/$(MODULE).vcd: test/$(MODULE).vvp
-	$(vvp_cmd) $<
+	$(call run,$(vvp_cmd) $<)
 
 test/$(MODULE).vvp: test/$(MODULE).v
-	$(iverilog_cmd) -I src -I test -o $@ \
+	$(call run,$(iverilog_cmd) -I src -I test -o $@ \
 		-DDUMPFILE_PATH=$(basename $@).vcd \
 		-DTEST_SUBJECT=$(MODULE) \
-		$<
+		$<)
 
 # -- MISC -----------------------
 
 .PHONY: stats
 stats:
-	$(yosys_cmd) -p 'stat -top $(MODULE)' src/$(MODULE).v
+	$(call run,$(yosys_cmd) -p 'stat -top $(MODULE)' src/$(MODULE).v)

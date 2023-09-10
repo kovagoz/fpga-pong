@@ -6,8 +6,8 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = false
 
   # In the virtual machine the project will be
-  # accessible under the /host folder.
-  config.vm.synced_folder ".", "/host"
+  # accessible under the /mnt/project folder.
+  config.vm.synced_folder ".", "/mnt/project"
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
