@@ -5,6 +5,7 @@
 `include "Hit_Detector.v"
 `include "Net.v"
 `include "Paddle.v"
+`include "Score_Board.v"
 `include "Vga.v"
 
 module Main(
@@ -134,6 +135,19 @@ module Main(
   );
 
   //------------------------------
+  //  Score Board
+  //------------------------------
+
+  wire w_Score_Board_Video;
+
+  Score_Board sb(
+    .i_Clk(i_Clk),
+    .i_HC(w_HC),
+    .i_VC(w_VC),
+    .o_Video(w_Score_Board_Video)
+  );
+
+  //------------------------------
   //  VGA
   //------------------------------
 
@@ -142,16 +156,20 @@ module Main(
   wire w_HBlank;
   wire w_VBlank;
   wire w_Video;
+  wire [9:0] w_HC;
+  wire [9:0] w_VC;
 
   Vga vga(
     .i_Clk(i_Clk),
-    .i_Video(w_Paddle_Video | w_Ball_Video | w_Net_Video),
+    .i_Video(w_Paddle_Video | w_Ball_Video | w_Net_Video | w_Score_Board_Video),
     .o_HSync(o_VGA_HSync),
     .o_VSync(o_VGA_VSync),
     .o_HReset(w_HReset),
     .o_VReset(w_VReset),
     .o_HBlank(w_HBlank),
     .o_VBlank(w_VBlank),
+    .o_HC(w_HC),
+    .o_VC(w_VC),
     .o_Video(w_Video)
   );
 

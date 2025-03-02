@@ -35,6 +35,9 @@ module Vga(
   output o_HReset,
   output o_VReset,
 
+  output [9:0] o_HC, // Horizontal counter
+  output [9:0] o_VC, // Vertical counter
+
   output o_Video);
 
   // Initial position of the H/V counters (useful for testing).
@@ -89,5 +92,8 @@ module Vga(
 
   // Enable video signal only in the visible area of the screen.
   assign o_Video = (`IS_VISIBLE(x, y) && i_Video);
+
+  assign o_HC = x;
+  assign o_VC = y;
 
 endmodule
